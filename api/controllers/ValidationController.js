@@ -6,14 +6,25 @@ const mempool = new MemPool.Mempool();
 
 module.exports = {
 
-  read: async function (req, res) {
+  add: async function (req, res) {
     var address = req.param('address');
-
-    mempool.addRequestValidation(address).then((block) => {
-      return res.json(block);
+    
+    mempool.addRequestValidation(address).then((data) => {
+        return res.json(data);
     }).catch((err) => {
-      return res.notFound();
+        console.log(err);
+        return res.notFound();
+    });
+  },
+
+  validate: async function (req, res) {
+    var address = req.param('address');
+    var signature = req.param('signature');
+
+    mempool.validateRequestByWallet(address, signature).then((data) => {
+        return res.json(data);
+    }).catch((err) => {
+        return res.notFound();
     });
   }
-
 };
