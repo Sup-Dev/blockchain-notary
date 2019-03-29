@@ -47,17 +47,17 @@ module.exports = {
       return res.badRequest("Invalid block body!");
     }
 
-    let newBlock  = new Block.Block(body);
-    currentBlockchain.addBlock(newBlock).then((result) => {
-      // console.log(result);
-      // let finalResult = result;
-      // finalResult['body']['star']['storyDecoded'] = hex2ascii(result['body']['star']['story']);
-      // console.log(finalResult);
-      return res.send(result);
-    }).catch((err) => {
-      return res.notFound();
-    });
-
+    if (mempool.verifyAddressRequest(address)) {
+      let newBlock  = new Block.Block(body);
+      currentBlockchain.addBlock(newBlock).then((result) => {
+        mempool.removeAddress(address);
+        return res.json(result);
+      }).catch((err) => {
+        return res.notFound();
+      });
+    } else {
+      return res.json({"error": "Validate your address before registering the address!"})
+    }
   },
 
   read: async function (req, res) {

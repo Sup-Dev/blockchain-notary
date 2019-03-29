@@ -95,6 +95,19 @@ class Mempool {
             resolve(data);
         });
     }
+
+    verifyAddressRequest(address) {
+        if (address in this.mempoolValid) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    removeAddress(address) {
+        delete this.mempool[address];
+        delete this.mempoolValid[address];
+    }
   }
   
   module.exports.Mempool = Mempool;
