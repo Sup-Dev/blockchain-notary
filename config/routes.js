@@ -22,8 +22,10 @@ module.exports.routes = {
   '/': { view: 'pages/homepage' },
   'GET /block/:id': { controller: 'BlockController', action: 'read' },
   'POST /block': { controller: 'BlockController', action: 'create' },
-  'POST /requestValidation': { controller: 'ValidationController', action: 'add'},
-  'POST /message-signature/validate': { controller: 'ValidationController', action: 'validate'},
+  'GET /stars/hash:hash': { controller: 'BlockController', action: 'gethash' },
+  'GET /stars/address:address': { controller: 'BlockController', action: 'getaddress' },
+  'POST /requestValidation': { controller: 'BlockController', action: 'add'},
+  'POST /message-signature/validate': { controller: 'BlockController', action: 'validate'},
 
   /***************************************************************************
   *                                                                          *

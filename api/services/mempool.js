@@ -55,10 +55,10 @@ class Mempool {
 
         const message = [address, timestamp, 'starRegistry'].join(':');
 
-        console.log(address);
-        console.log(signature);
-        console.log(timestamp);
-        console.log(message);
+        // console.log(address);
+        // console.log(signature);
+        // console.log(timestamp);
+        // console.log(message);
 
         try {
             isValid = bitcoinMessage.verify(message, address, signature);
@@ -81,7 +81,7 @@ class Mempool {
                     requestTimeStamp: timestamp,
                     message: message,
                     validationWindow: validationWindow,
-                    messageSignature: 'valid'
+                    messageSignature: true
                 }
             };
         } else {

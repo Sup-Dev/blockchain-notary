@@ -62,6 +62,16 @@ class Blockchain {
         return this.bd.getLevelDBData(height);
     }
 
+    // Get Block By Hash
+    getBlockByHash(hash) {
+        return this.bd.getBlockByHash(hash.substring(1));
+    }
+
+    // Get Block By Address
+    getBlockByAddress(address) {
+        return this.bd.getBlockByAddress(address.substring(1));
+    }
+
     // Validate if Block is being tampered by Block Height
     validateBlock(height) {
         // Add your code here

@@ -3,6 +3,7 @@
 /===================================================*/
 
 const level = require('level');
+const hex2ascii = require('hex2ascii');
 const chainDB = './chaindata';
 
 class LevelSandbox {
@@ -21,7 +22,15 @@ class LevelSandbox {
                   resolve({"error": "Invalid block number"});
                   return console.log('Not found!', err);
                 }
-                resolve(JSON.parse(value));
+
+                let d = JSON.parse(value);
+
+                try {
+                    d['body']['star']['storyDecoded'] = hex2ascii(d['body']['star']['story']);
+                } catch(err) {
+                    console.log(err);
+                }
+                resolve(d);
             })
         });
     }
@@ -60,7 +69,54 @@ class LevelSandbox {
         });
     }
 
+    getBlockByHash(hash) {
+        let self = this;
+        let block = null;
+        return new Promise(function(resolve, reject){
+            self.db.createReadStream()
+            .on('data', function (data) {
+                let d = JSON.parse(data.value);
+                
+                if(d.hash === hash){
+                    d['body']['star']['storyDecoded'] = hex2ascii(d['body']['star']['story']);
+                    block = d;
+                }
+            })
+            .on('error', function (err) {
+                reject(err)
+            })
+            .on('close', function () {
+                resolve(block);
+            });
+        });
+    }
 
+    getBlockByAddress(address) {
+        let self = this;
+        let block = [];
+        return new Promise(function(resolve, reject){
+            self.db.createReadStream()
+            .on('data', function (data) {
+                try {
+                    let d = JSON.parse(data.value);
+                    
+                    if(d.body.address == address){
+                        d['body']['star']['storyDecoded'] = hex2ascii(d['body']['star']['story']);
+                        block.push(d);
+                    }                 
+                } catch(err) {
+                    console.log(err);
+                }
+            })
+            .on('error', function (err) {
+                reject(err)
+            })
+            .on('close', function () {
+                resolve(block);
+            });
+        });
+    }
+ 
 }
 
 module.exports.LevelSandbox = LevelSandbox;
